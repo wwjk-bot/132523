@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketing Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0a0a0a;
+      color: white;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .header {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 36px;
+    }
+
+    .subtext {
+      color: rgba(255,255,255,0.7);
+      max-width: 700px;
+      line-height: 1.5;
+    }
+
+    .top-actions {
+      margin-top: 20px;
+    }
+
+    .button {
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 16px;
+      padding: 12px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.08);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .panel {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 24px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .tag {
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .section-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 14px;
+    }
+
+    .table-wrap,
+    .trend-wrap {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    th {
+      color: rgba(255,255,255,0.6);
+      font-weight: 600;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .trend-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .trend-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .trend-mini {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .mini-box {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .input-page {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .input-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+    }
+
+    .field-group {
+      margin-bottom: 18px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 8px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.25);
+      color: white;
+      font-size: 14px;
+    }
+
+    .type-toggle {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .type-toggle button {
+      padding: 13px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.25);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .type-toggle button.active {
+      background: white;
+      color: black;
+      border-color: white;
+    }
+
+    .three-grid,
+    .two-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .three-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .two-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .validation-box {
+      border-radius: 16px;
+      padding: 14px;
+      margin: 18px 0;
+      font-size: 14px;
+    }
+
+    .validation-good {
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.25);
+      color: #a7f3d0;
+    }
+
+    .validation-bad {
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.25);
+      color: #fecaca;
+    }
+
+    .entries-empty {
+      border: 1px dashed rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 18px;
+      color: rgba(255,255,255,0.5);
+      background: rgba(0,0,0,0.25);
+    }
+
+    .entry-card {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .entry-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .entry-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .entry-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .badge {
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+    }
+
+    @media (max-width: 1000px) {
+      .dashboard-grid,
+      .input-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .stats,
+      .three-grid,
+      .two-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="eyebrow">Escort Academy</div>
+      <h1>Marketing Dashboard</h1>
+      <div class="subtext">
+        leadership view for all leads heard from and qualification breakdown
+      </div>
+      <div class="top-actions">
+        <button class="button" onclick="showDashboard()">dashboard</button>
+        <button class="button secondary" onclick="showInput()">rhea input page</button>
+      </div>
+    </div>
+
+    <div id="dashboardPage"></div>
+    <div id="inputPage" class="input-page"></div>
+  </div>
+
+  <script>
+    const allLeadSources = [
+      "google",
+      "youtube",
+      "instagram",
+      "oldig",
+      "ig2",
+      "ig3",
+      "ig4",
+      "eurogirls",
+      "ad1",
+      "ad2"
+    ]
+
+    const heardFromSources = [
+      "instagram",
+      "youtube",
+      "google",
+      "podcast",
+      "tiktok",
+      "escort ad site",
+      "from a friend",
+      "other"
+    ]
+
+    const leadRows = [
+      { id: "1", date: "2026-04-01", source: "google", total: 8, nq: 2, fnq: 3, q: 3, type: "all_leads" },
+      { id: "2", date: "2026-04-01", source: "instagram", total: 10, nq: 3, fnq: 4, q: 3, type: "all_leads" },
+      { id: "3", date: "2026-04-01", source: "youtube", total: 6, nq: 1, fnq: 2, q: 3, type: "all_leads" },
+      { id: "4", date: "2026-04-02", source: "google", total: 7, nq: 2, fnq: 2, q: 3, type: "all_leads" },
+      { id: "5", date: "2026-04-02", source: "instagram", total: 9, nq: 2, fnq: 4, q: 3, type: "all_leads" },
+      { id: "6", date: "2026-04-02", source: "oldig", total: 4, nq: 1, fnq: 2, q: 1, type: "all_leads" },
+      { id: "7", date: "2026-04-03", source: "ig2", total: 5, nq: 1, fnq: 2, q: 2, type: "all_leads" },
+      { id: "8", date: "2026-04-03", source: "youtube", total: 8, nq: 2, fnq: 3, q: 3, type: "all_leads" },
+      { id: "9", date: "2026-04-03", source: "eurogirls", total: 3, nq: 1, fnq: 1, q: 1, type: "all_leads" },
+      { id: "10", date: "2026-04-04", source: "google", total: 11, nq: 3, fnq: 4, q: 4, type: "all_leads" },
+      { id: "11", date: "2026-04-04", source: "instagram", total: 7, nq: 2, fnq: 2, q: 3, type: "all_leads" },
+      { id: "12", date: "2026-04-04", source: "youtube", total: 5, nq: 1, fnq: 2, q: 2, type: "all_leads" },
+
+      { id: "13", date: "2026-04-01", source: "instagram", total: 9, nq: 2, fnq: 4, q: 3, type: "heard_from" },
+      { id: "14", date: "2026-04-01", source: "youtube", total: 7, nq: 2, fnq: 2, q: 3, type: "heard_from" },
+      { id: "15", date: "2026-04-01", source: "google", total: 4, nq: 1, fnq: 2, q: 1, type: "heard_from" },
+      { id: "16", date: "2026-04-02", source: "instagram", total: 10, nq: 3, fnq: 4, q: 3, type: "heard_from" },
+      { id: "17", date: "2026-04-02", source: "youtube", total: 6, nq: 1, fnq: 2, q: 3, type: "heard_from" },
+      { id: "18", date: "2026-04-02", source: "tiktok", total: 3, nq: 1, fnq: 1, q: 1, type: "heard_from" },
+      { id: "19", date: "2026-04-03", source: "instagram", total: 8, nq: 2, fnq: 3, q: 3, type: "heard_from" },
+      { id: "20", date: "2026-04-03", source: "podcast", total: 4, nq: 1, fnq: 2, q: 1, type: "heard_from" },
+      { id: "21", date: "2026-04-03", source: "escort ad site", total: 2, nq: 1, fnq: 1, q: 0, type: "heard_from" },
+      { id: "22", date: "2026-04-04", source: "instagram", total: 11, nq: 3, fnq: 4, q: 4, type: "heard_from" },
+      { id: "23", date: "2026-04-04", source: "youtube", total: 5, nq: 1, fnq: 2, q: 2, type: "heard_from" },
+      { id: "24", date: "2026-04-04", source: "from a friend", total: 2, nq: 1, fnq: 0, q: 1, type: "heard_from" }
+    ]
+
+    const savedEntries = []
+
+    function getRowsByType(type) {
+      return leadRows.filter(row => row.type === type)
+    }
+
+    function getDashboardSummary(rows) {
+      const totals = rows.reduce((acc, row) => {
+        acc.total += row.total
+        acc.q += row.q
+        acc.fnq += row.fnq
+        acc.nq += row.nq
+        return acc
+      }, { total: 0, q: 0, fnq: 0, nq: 0 })
+
+      return {
+        total: totals.total,
+        q: totals.q,
+        fnq: totals.fnq,
+        nq: totals.nq,
+        qRate: getRate(totals.q, totals.total),
+        fnqRate: getRate(totals.fnq, totals.total),
+        nqRate: getRate(totals.nq, totals.total)
+      }
+    }
+
+    function getBreakdownBySource(rows) {
+      const bySource = {}
+
+      rows.forEach(row => {
+        if (!bySource[row.source]) {
+          bySource[row.source] = {
+            source: row.source,
+            total: 0,
+            q: 0,
+            fnq: 0,
+            nq: 0
+          }
+        }
+
+        bySource[row.source].total += row.total
+        bySource[row.source].q += row.q
+        bySource[row.source].fnq += row.fnq
+        bySource[row.source].nq += row.nq
+      })
+
+      return Object.values(bySource).sort((a, b) => b.total - a.total)
+    }
+
+    function getDailyTrend(rows) {
+      const byDate = {}
+
+      rows.forEach(row => {
+        if (!byDate[row.date]) {
+          byDate[row.date] = {
+            date: row.date,
+            total: 0,
+            q: 0,
+            fnq: 0,
+            nq: 0
+          }
+        }
+
+        byDate[row.date].total += row.total
+        byDate[row.date].q += row.q
+        byDate[row.date].fnq += row.fnq
+        byDate[row.date].nq += row.nq
+      })
+
+      return Object.values(byDate).sort((a, b) => a.date.localeCompare(b.date))
+    }
+
+    function getRate(value, total) {
+      if (total === 0) return 0
+      return value / total
+    }
+
+    function formatPercent(value) {
+      return (value * 100).toFixed(1) + "%"
+    }
+
+    function buildSection(title, rows) {
+      const summary = getDashboardSummary(rows)
+      const breakdown = getBreakdownBySource(rows)
+      const trend = getDailyTrend(rows)
+
+      return `
+        <div class="panel">
+          <div class="panel-header">
+            <h2>${title}</h2>
+            <div class="tag">overview</div>
+          </div>
+
+          <div class="stats">
+            <div class="stat-card">
+              <div class="stat-label">Total Leads</div>
+              <div class="stat-value">${summary.total}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Q Leads</div>
+              <div class="stat-value">${summary.q} · ${formatPercent(summary.qRate)}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">FNQ Leads</div>
+              <div class="stat-value">${summary.fnq} · ${formatPercent(summary.fnqRate)}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">NQ Leads</div>
+              <div class="stat-value">${summary.nq} · ${formatPercent(summary.nqRate)}</div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <div class="section-title">Source Breakdown</div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Source</th>
+                  <th>Total</th>
+                  <th>Q</th>
+                  <th>FNQ</th>
+                  <th>NQ</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${breakdown.map(row => `
+                  <tr>
+                    <td>${row.source}</td>
+                    <td>${row.total}</td>
+                    <td>${row.q}</td>
+                    <td>${row.fnq}</td>
+                    <td>${row.nq}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="trend-wrap">
+            <div class="section-title">Daily Trend</div>
+            ${trend.map(row => `
+              <div class="trend-card">
+                <div class="trend-top">
+                  <span>${row.date}</span>
+                  <span>total ${row.total}</span>
+                </div>
+                <div class="trend-mini">
+                  <div class="mini-box">Q ${row.q}</div>
+                  <div class="mini-box">FNQ ${row.fnq}</div>
+                  <div class="mini-box">NQ ${row.nq}</div>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `
+    }
+
+    function renderDashboard() {
+      document.getElementById("dashboardPage").innerHTML = `
+        <div class="dashboard-grid">
+          ${buildSection("All Leads", getRowsByType("all_leads"))}
+          ${buildSection("Heard From", getRowsByType("heard_from"))}
+        </div>
+      `
+    }
+
+    function renderInputPage() {
+      const entryType = document.getElementById("entryType")?.value || "all_leads"
+      const sourceOptions = entryType === "all_leads" ? allLeadSources : heardFromSources
+
+      document.getElementById("inputPage").innerHTML = `
+        <div class="input-layout">
+          <div class="panel">
+            <h2 style="margin-top:0;">Rhea Input Page</h2>
+            <div class="subtext" style="margin-top:8px;">
+              simple internal form for entering lead totals and qualification breakdowns
+            </div>
+
+            <div style="margin-top:24px;">
+              <div class="two-grid">
+                <div class="field-group">
+                  <label class="field-label">Entry Type</label>
+                  <div class="type-toggle">
+                    <button id="typeAllBtn" class="${entryType === "all_leads" ? "active" : ""}" onclick="setEntryType('all_leads')">All Leads</button>
+                    <button id="typeHeardBtn" class="${entryType === "heard_from" ? "active" : ""}" onclick="setEntryType('heard_from')">Heard From</button>
+                  </div>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label">Date</label>
+                  <input id="dateInput" type="date" />
+                </div>
+              </div>
+
+              <div class="two-grid">
+                <div class="field-group">
+                  <label class="field-label">Source</label>
+                  <select id="sourceInput">
+                    ${sourceOptions.map(source => `<option value="${source}">${source}</option>`).join("")}
+                  </select>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label">Total Leads</label>
+                  <input id="totalInput" type="number" min="0" value="0" oninput="updateValidation()" />
+                </div>
+              </div>
+
+              <div class="three-grid">
+                <div class="field-group">
+                  <label class="field-label">NQ</label>
+                  <input id="nqInput" type="number" min="0" value="0" oninput="updateValidation()" />
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label">FNQ</label>
+                  <input id="fnqInput" type="number" min="0" value="0" oninput="updateValidation()" />
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label">Q</label>
+                  <input id="qInput" type="number" min="0" value="0" oninput="updateValidation()" />
+                </div>
+              </div>
+
+              <div id="validationBox" class="validation-box validation-good"></div>
+
+              <div style="margin-top:18px;">
+                <button class="button" onclick="saveEntry()">Save Entry</button>
+                <button class="button secondary" onclick="renderInputPage()">Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2 style="margin-top:0;">Preview of Saved Entries</h2>
+            <div class="subtext" style="margin-top:8px;">
+              these are only temporary browser entries for now
+            </div>
+
+            <div id="entriesList" style="margin-top:20px;">
+              ${savedEntries.length === 0 ? `
+                <div class="entries-empty">No entries yet</div>
+              ` : savedEntries.map(entry => `
+                <div class="entry-card">
+                  <div class="entry-top">
+                    <div>
+                      <div class="entry-title">${entry.source}</div>
+                      <div class="entry-sub">${entry.type === "all_leads" ? "all leads" : "heard from"} · ${entry.date}</div>
+                    </div>
+                    <div class="badge">total ${entry.total}</div>
+                  </div>
+
+                  <div class="trend-mini">
+                    <div class="mini-box">Q ${entry.q}</div>
+                    <div class="mini-box">FNQ ${entry.fnq}</div>
+                    <div class="mini-box">NQ ${entry.nq}</div>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `
+
+      updateValidation()
+    }
+
+    let currentEntryType = "all_leads"
+
+    function setEntryType(type) {
+      currentEntryType = type
+      renderInputPage()
+    }
+
+    function updateValidation() {
+      const total = Number(document.getElementById("totalInput")?.value || 0)
+      const nq = Number(document.getElementById("nqInput")?.value || 0)
+      const fnq = Number(document.getElementById("fnqInput")?.value || 0)
+      const q = Number(document.getElementById("qInput")?.value || 0)
+
+      const breakdownTotal = nq + fnq + q
+      const isMismatch = total !== breakdownTotal
+
+      const box = document.getElementById("validationBox")
+      if (!box) return
+
+      box.className = "validation-box " + (isMismatch ? "validation-bad" : "validation-good")
+      box.innerHTML = `
+        <div><strong>Breakdown total:</strong> ${breakdownTotal} / <strong>Total leads:</strong> ${total}</div>
+        <div style="margin-top:6px; opacity:0.85;">
+          ${isMismatch ? "The NQ FNQ and Q numbers do not add up to the total yet" : "Numbers match correctly"}
+        </div>
+      `
+    }
+
+    function saveEntry() {
+      const total = Number(document.getElementById("totalInput")?.value || 0)
+      const nq = Number(document.getElementById("nqInput")?.value || 0)
+      const fnq = Number(document.getElementById("fnqInput")?.value || 0)
+      const q = Number(document.getElementById("qInput")?.value || 0)
+      const date = document.getElementById("dateInput")?.value || ""
+      const source = document.getElementById("sourceInput")?.value || ""
+      const breakdownTotal = nq + fnq + q
+
+      if (!date) {
+        alert("please enter a date")
+        return
+      }
+
+      if (total !== breakdownTotal) {
+        alert("nq fnq and q must add up to total leads")
+        return
+      }
+
+      savedEntries.unshift({
+        id: String(Date.now()),
+        date,
+        source,
+        total,
+        nq,
+        fnq,
+        q,
+        type: currentEntryType
+      })
+
+      renderInputPage()
+    }
+
+    function showDashboard() {
+      document.getElementById("dashboardPage").style.display = "block"
+      document.getElementById("inputPage").style.display = "none"
+    }
+
+    function showInput() {
+      document.getElementById("dashboardPage").style.display = "none"
+      document.getElementById("inputPage").style.display = "block"
+      renderInputPage()
+    }
+
+    renderDashboard()
+    showDashboard()
+  </script>
+</body>
+</html>
