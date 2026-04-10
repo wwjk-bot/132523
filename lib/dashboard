@@ -1,4 +1,3 @@
-
 import { type LeadRow } from "@/lib/data"
 
 type DashboardSummary = {
