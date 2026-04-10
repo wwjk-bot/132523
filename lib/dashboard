@@ -1,1 +1,112 @@
 
+import { type LeadRow } from "@/lib/data"
+
+type DashboardSummary = {
+  total: number
+  q: number
+  fnq: number
+  nq: number
+  qRate: number
+  fnqRate: number
+  nqRate: number
+}
+
+type BreakdownRow = {
+  source: string
+  total: number
+  q: number
+  fnq: number
+  nq: number
+}
+
+type DailyTrendRow = {
+  date: string
+  total: number
+  q: number
+  fnq: number
+  nq: number
+}
+
+export function getDashboardSummary(rows: LeadRow[]): DashboardSummary {
+  const totals = rows.reduce(
+    (acc, row) => {
+      acc.total += row.total
+      acc.q += row.q
+      acc.fnq += row.fnq
+      acc.nq += row.nq
+      return acc
+    },
+    { total: 0, q: 0, fnq: 0, nq: 0 }
+  )
+
+  return {
+    total: totals.total,
+    q: totals.q,
+    fnq: totals.fnq,
+    nq: totals.nq,
+    qRate: getRate(totals.q, totals.total),
+    fnqRate: getRate(totals.fnq, totals.total),
+    nqRate: getRate(totals.nq, totals.total),
+  }
+}
+
+export function getBreakdownBySource(rows: LeadRow[]): BreakdownRow[] {
+  const bySource = new Map<string, BreakdownRow>()
+
+  for (const row of rows) {
+    const existing = bySource.get(row.source)
+
+    if (existing) {
+      existing.total += row.total
+      existing.q += row.q
+      existing.fnq += row.fnq
+      existing.nq += row.nq
+    } else {
+      bySource.set(row.source, {
+        source: row.source,
+        total: row.total,
+        q: row.q,
+        fnq: row.fnq,
+        nq: row.nq,
+      })
+    }
+  }
+
+  return Array.from(bySource.values()).sort((a, b) => b.total - a.total)
+}
+
+export function getDailyTrend(rows: LeadRow[]): DailyTrendRow[] {
+  const byDate = new Map<string, DailyTrendRow>()
+
+  for (const row of rows) {
+    const existing = byDate.get(row.date)
+
+    if (existing) {
+      existing.total += row.total
+      existing.q += row.q
+      existing.fnq += row.fnq
+      existing.nq += row.nq
+    } else {
+      byDate.set(row.date, {
+        date: row.date,
+        total: row.total,
+        q: row.q,
+        fnq: row.fnq,
+        nq: row.nq,
+      })
+    }
+  }
+
+  return Array.from(byDate.values()).sort((a, b) =>
+    a.date.localeCompare(b.date)
+  )
+}
+
+export function formatPercent(value: number): string {
+  return `${(value * 100).toFixed(1)}%`
+}
+
+function getRate(value: number, total: number): number {
+  if (total === 0) return 0
+  return value / total
+}
